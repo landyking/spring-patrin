@@ -1,0 +1,43 @@
+{GET    /api/v1/management/private/marketing/{merchantId}/activities}
+{POST   /api/v1/management/private/marketing/{merchantId}/activities}
+{PUT    /api/v1/management/private/marketing/{merchantId}/activities/{id}}
+{GET    /api/v1/management/private/marketing/{merchantId}/activities/{id}}
+{PUT    /api/v1/management/private/marketing/{merchantId}/activities/{id}/audit}
+{PUT    /api/v1/management/private/marketing/{merchantId}/activities/{id}/switch}
+{POST   /api/v1/management/private/marketing/{merchantId}/coupon}
+{GET    /api/v1/management/private/marketing/{merchantId}/coupon/page}
+
+{GET    /api/v1/management/private/marketing/{merchantId}/coupon_rule/options/check_status}
+{GET    /api/v1/management/private/marketing/{merchantId}/coupon_rule/options/coupon_type}
+{PUT    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}}
+{GET    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}}
+{PUT    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}/used_status/enable}
+{PUT    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}/used_status/disable}
+{PUT    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}/check_status/approve}
+{PUT    /api/v1/management/private/marketing/{merchantId}/coupon_rule/{couponRuleId}/check_status/refused}
+{GET    /api/v1/management/private/marketing/{merchantId}/items}
+{GET    /api/v1/management/private/marketing/{merchantId}/items/{itemId}}
+{POST   /api/v1/management/private/marketing/{merchantId}/items/create}
+{PUT    /api/v1/management/private/marketing/{merchantId}/items/{recId}}
+{DELETE /api/v1/management/private/marketing/{merchantId}/items/{recId}}
+
+{GET    /api/v1/administration/private/marketing/categories}
+{POST   /api/v1/administration/private/marketing/categories/create}
+{PUT    /api/v1/administration/private/marketing/categories/{recId}}
+{DELETE /api/v1/administration/private/marketing/categories/{recId}}
+{GET    /api/v1/administration/private/marketing/categories/{recId}}
+{GET    /api/mini/v1/private/user/coupons}
+{GET    /api/mini/v1/private/user/coupon/{couponId}}
+{GET    /api/mini/v1/private/user/activities}
+{POST   /api/mini/v1/private/coupon/{couponId}/refund}
+
+{GET    /api/mini/v1/public/activities/{id}}
+{GET    /api/mini/v1/public/activities/{id}/bought}
+{GET    /api/mini/v1/public/activities/search}
+{GET    /api/mini/v1/public/merchants/{merchantId}/activities}
+{GET    /api/mini/v1/public/coupon_rule/store/{storeId}}
+{GET    /api/mini/v1/public/coupon_rule/categories}
+{GET    /api/mini/v1/public/coupon_rule/{couponRuleId}}
+{GET    /api/mini/v1/public/coupon_rule/{couponRuleId}/limitBuy}
+{POST   /api/mini/v1/login/coupon_rule/{couponRuleId}/get}
+
