@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * @author: landy
  * @date: 2019-04-11 22:07
  */
-@Service
+//@Service
 public class Printer implements InitializingBean, ServletContextAware {
     private ServletContext servletContext;
 
