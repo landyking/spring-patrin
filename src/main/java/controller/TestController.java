@@ -14,4 +14,7 @@ public class TestController {
     public ResponseEntity index() {
         return ResponseEntity.ok("hello");
     }
+    public void lala(){
+
+    }
 }
