@@ -22,15 +22,17 @@ import java.util.function.Predicate;
 
 public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
-    private String prefixPkg="controller.";
-    private String suffixClass="Controller";
+    public static final String PREFIX_PKG = "controller.";
+    public static final String SUFFIX_CLASS = "Controller";
+    private String prefixPkg = PREFIX_PKG;
+    private String suffixClass = SUFFIX_CLASS;
     @Nullable
     private StringValueResolver embeddedValueResolver;
 
     @Override
     public void afterPropertiesSet() {
-        this.prefixPkg = getApplicationContext().getEnvironment().getProperty("patrin.prefixPkg");
-        this.suffixClass = getApplicationContext().getEnvironment().getProperty("patrin.suffixClass");
+        this.prefixPkg = getApplicationContext().getEnvironment().getProperty("patrin.prefixPkg", PREFIX_PKG);
+        this.suffixClass = getApplicationContext().getEnvironment().getProperty("patrin.suffixClass", SUFFIX_CLASS);
         super.afterPropertiesSet();
     }
 
