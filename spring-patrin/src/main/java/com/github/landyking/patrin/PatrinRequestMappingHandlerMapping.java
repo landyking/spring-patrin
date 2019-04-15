@@ -15,10 +15,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
 
@@ -75,13 +77,13 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         RequestMapping rm = AnnotatedElementUtils.findMergedAnnotation(handlerType, RequestMapping.class);
         if (rm == null) {
             String sb = processHandlerName(handlerType.getName());
-            rm = createReplaceAnnotation(sb);
+            rm = createReplaceAnnotation(new AbstractMap.SimpleEntry<>(sb,null));
         }
         return rm;
     }
 
     protected String processHandlerName(String name) {
-        boolean skipFirst=true;
+        boolean skipFirst = true;
         String[] arr = name.substring(prefixPkg.length()).split("\\.");
         String[] pkgs;
         String ctl;
@@ -94,9 +96,9 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         }
         StringBuilder sb = new StringBuilder();
         for (String p : pkgs) {
-            if(skipFirst){
-                skipFirst=false;
-            }else {
+            if (skipFirst) {
+                skipFirst = false;
+            } else {
                 sb.append("/");
             }
             if (isPathVar(p)) {
@@ -113,9 +115,9 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
 
         String classPrefix = ctl.substring(0, ctl.length() - suffixClass.length());
         if (!classPrefix.equals("__")) {
-            if(skipFirst){
-                skipFirst=false;
-            }else {
+            if (skipFirst) {
+                skipFirst = false;
+            } else {
                 sb.append("/");
             }
             String[] tar = classPrefix.split("_");
@@ -158,17 +160,19 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         return rm;
     }
 
-    static List<String> HTTP_METHODS = Arrays.asList("GET__", "POST__", "PUT__", "DELETE__");
+    static Map<String, RequestMethod> HTTP_METHODS = Arrays.stream(RequestMethod.values()).collect(Collectors.toMap(enu -> enu.name().toUpperCase() + "__", Function.identity()));
 
-    protected String processMethodName(String name) {
-        for (String httpMethod : HTTP_METHODS) {
+    protected Map.Entry<String, RequestMethod> processMethodName(String name) {
+        RequestMethod requestMethod = null;
+        for (String httpMethod : HTTP_METHODS.keySet()) {
             if (name.startsWith(httpMethod)) {
                 name = name.substring(httpMethod.length());
+                requestMethod = HTTP_METHODS.get(httpMethod);
                 break;
             }
         }
         if (!StringUtils.hasText(name)) {
-            return "";
+            return new AbstractMap.SimpleEntry<>("", requestMethod);
         }
         String[] arr = name.split("__");
         StringBuilder sb = new StringBuilder();
@@ -182,7 +186,7 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
                 }
             }
         }
-        return sb.toString();
+        return new AbstractMap.SimpleEntry<>(sb.toString(), requestMethod);
     }
 
     private String getPathPrefix(Class<?> handlerType) {
@@ -205,7 +209,8 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         return (requestMapping != null ? createRequestMappingInfo(requestMapping, condition) : null);
     }
 
-    private RequestMapping createReplaceAnnotation(final String name, final RequestMapping old) {
+    private RequestMapping createReplaceAnnotation(final Map.Entry<String, RequestMethod> meta, final RequestMapping old) {
+        String name = meta.getKey();
         return new RequestMapping() {
 
             @Override
@@ -230,6 +235,9 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
 
             @Override
             public RequestMethod[] method() {
+                if (meta.getValue() != null && old.method().length <= 0) {
+                    return new RequestMethod[]{meta.getValue()};
+                }
                 return old.method();
             }
 
@@ -255,7 +263,9 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         };
     }
 
-    private RequestMapping createReplaceAnnotation(final String name) {
+    private RequestMapping createReplaceAnnotation(final Map.Entry<String, RequestMethod> meta) {
+        String name = meta.getKey();
+
         return new RequestMapping() {
 
             @Override
@@ -280,6 +290,9 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
 
             @Override
             public RequestMethod[] method() {
+                if (meta.getValue() != null) {
+                    return new RequestMethod[]{meta.getValue()};
+                }
                 return new RequestMethod[0];
             }
 
