@@ -81,6 +81,7 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
     }
 
     protected String processHandlerName(String name) {
+        boolean skipFirst=true;
         String[] arr = name.substring(prefixPkg.length()).split("\\.");
         String[] pkgs;
         String ctl;
@@ -93,7 +94,11 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
         }
         StringBuilder sb = new StringBuilder();
         for (String p : pkgs) {
-            sb.append("/");
+            if(skipFirst){
+                skipFirst=false;
+            }else {
+                sb.append("/");
+            }
             if (isPathVar(p)) {
                 sb.append("{").append(p, 1, p.length() - 1).append("}");
             } else {
@@ -108,7 +113,11 @@ public class PatrinRequestMappingHandlerMapping extends RequestMappingHandlerMap
 
         String classPrefix = ctl.substring(0, ctl.length() - suffixClass.length());
         if (!classPrefix.equals("__")) {
-            sb.append("/");
+            if(skipFirst){
+                skipFirst=false;
+            }else {
+                sb.append("/");
+            }
             String[] tar = classPrefix.split("_");
             boolean flag = false;
             for (String t : tar) {

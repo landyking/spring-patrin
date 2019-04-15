@@ -1,4 +1,4 @@
-package com.github.landyking.patrin;
+package com.github.landyking.patrin_example;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * @author: landy
  * @date: 2019-04-11 22:07
  */
-//@Service
+@Service
 public class Printer implements InitializingBean, ServletContextAware {
     private ServletContext servletContext;
 

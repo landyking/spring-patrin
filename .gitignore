@@ -1,6 +1,8 @@
 HELP.md
 /target/
 !.mvn/wrapper/maven-wrapper.jar
+/spring-patrin/target/
+/spring-patrin-example/target/
 
 ### STS ###
 .apt_generated
